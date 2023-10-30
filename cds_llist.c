@@ -19,7 +19,7 @@ void cds_llist_destroy(cdsLList* list) {
 }
 
 void cds_llist_push(cdsLList* list, void* data) {
-    cdsLNode* newNode = (cdsLNode*)  malloc(sizeof(cdsLNode));
+    cdsLNode* newNode = (cdsLNode*) malloc(sizeof(cdsLNode));
     newNode->next = NULL;
     newNode->data = malloc(list->dataSize);
     // copy bytes into newNode->data

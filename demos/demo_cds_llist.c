@@ -45,7 +45,7 @@ int main(int argc, char* argv[]) {
 
     // lets print the length of the list now
     printf("list size after adding 100 then removing 2 elements: %zu\n", 
-            ints.len);
+            cds_llist_len(&ints));
 
     // if ints was a dynamically allocated pointer, we would also need to free
     // it, otherwise the rest is taken care of below
