@@ -20,44 +20,49 @@ typedef struct cdsLList {
     cdsLNode* tail;
     size_t len;
     size_t dataSize;
-    int (*cmp)(void*, void*);
+    int(*cmp)(void*, void*);
 } cdsLList;
 
-/* cds_llist_init()
- * ----------------
+/* cds_llist_init
+ * --------------
  * Initialise a linked list. Must be called before any other function.
  *
  * list: pointer to a cdsLList
- * dataSize: size of data type in bytes to be stored in the list 
+ * dataSize: size (in bytes) of data type to be stored in the list 
+ * cmp: function pointer to a compare function for the data type being stored
+ *      in the list. See cds_utils.h for basic type implementations or make
+ *      your own if you're using a custom data type.
  */
-void cds_llist_init(cdsLList* list, size_t dataSize);
+void cds_llist_init(cdsLList* list, size_t dataSize, int(*cmp)(void*, void*));
 
-/* cds_llist_destroy()
- * -------------------
- * Free memory used by a cdsLList.
+/* cds_llist_destroy
+ * -----------------
+ * Free memory used by a cdsLList. If list points to dynamically allocated
+ * memory, the user is responsible for calling free on it.
  *
  * list: pointer to a cdsLList
  */
 void cds_llist_destroy(cdsLList* list);
 
-/* cds_llist_push()
- * ----------------
+/* cds_llist_push
+ * --------------
  * Push data to the end of the list. Assumes data is of size
- * dataSize which must be set in cds_llist_init.
+ * list->dataSize which must be set in cds_llist_init.
  *
  * list: pointer to a cdsLList
- * data: generic data type to add to list
- * size: size of data type in bytes to be stored in the list 
+ * data: data to add to list
  */
 void cds_llist_push(cdsLList* list, void* data);
 
-/* cds_llist_remove()
- * Remove node identified by its data. cmp must be implemented
+/* cds_llist_remove
+ * ----------------
+ * Remove node identified by its data. The user is responsible for calling 
+ * free on the data returned (if return is not NULL).
  *
  * list: pointer to a cdsLList
- * data: identifying data to Remove
+ * data: identifying data to remove
  *
- * returns: data removed as a void pointer, NULL if data was not found
+ * return: data removed as a void pointer, NULL if data was not found
  */
 void* cds_llist_remove(cdsLList* list, void* data);
 

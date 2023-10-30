@@ -1,10 +1,11 @@
 #include "cds_llist.h"
 
-void cds_llist_init(cdsLList* list, size_t dataSize) {
+void cds_llist_init(cdsLList* list, size_t dataSize, int(*cmp)(void*, void*)) {
     list->head = NULL;
     list->tail = NULL;
     list->len = 0;
     list->dataSize = dataSize;
+    list->cmp = cmp;
 }
 
 void cds_llist_destroy(cdsLList* list) {
