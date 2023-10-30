@@ -1,9 +1,6 @@
 #include "cds_utils.h"
 
-// dummy function
-int cds_cmp(void* beevus, void* butthead) {
-    return -1;
-}
+//////////////////////////////// cmp functions ////////////////////////////////
 
 int cds_cmpi(void* first, void* second) {
     int firsti = *((int*) first);
@@ -51,4 +48,26 @@ int cds_cmpd(void* first, void* second) {
         return -1;
     }
     return 0;
+}
+
+//////////////////////////////// vtv functions ////////////////////////////////
+
+char cds_vtvc(void* data) {
+    return *((char*) data);
+}
+
+int cds_vtvi(void* data) {
+    return *((int*) data);
+}
+
+unsigned int cds_vtvu(void* data) {
+    return *((unsigned int*) data);
+}
+
+float cds_vtvf(void* data) {
+    return *((float*) data);
+}
+
+double cds_vtvd(void* data) {
+    return *((double*) data);
 }

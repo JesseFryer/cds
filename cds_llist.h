@@ -38,7 +38,10 @@ void cds_llist_init(cdsLList* list, size_t dataSize, int(*cmp)(void*, void*));
 /* cds_llist_destroy
  * -----------------
  * Free memory used by a cdsLList. If list points to dynamically allocated
- * memory, the user is responsible for calling free on it.
+ * memory, the user is responsible for calling free on it. This is a default
+ * destructor, if you are using a custom datatype with dynamically allocated
+ * member variables, this destructor will not free those members. You will 
+ * need to make your own custom destructor.
  *
  * list: pointer to a cdsLList
  */
@@ -65,5 +68,13 @@ void cds_llist_push(cdsLList* list, void* data);
  * return: data removed as a void pointer, NULL if data was not found
  */
 void* cds_llist_remove(cdsLList* list, void* data);
+
+/* cds_llist_len
+ * -------------
+ * Get the length of a list.
+ *
+ * return: number of elements in the list
+ */
+size_t cds_llist_len(cdsLList* list);
 
 #endif

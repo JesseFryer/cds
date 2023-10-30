@@ -54,3 +54,8 @@ void* cds_llist_remove(cdsLList* list, void* data) {
     }
     return NULL;
 }
+
+size_t cds_llist_len(cdsLList* list) {
+    size_t len = list->len; // so we can't accidently overwrite
+    return len;
+}
