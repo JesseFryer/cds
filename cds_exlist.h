@@ -18,7 +18,7 @@ typedef struct cdsExList {
 } cdsExList;
 
 /* cds_exlist_init
- * --------------
+ * ---------------
  * Initialise an extensible list. Must be called before any other function.
  *
  * list: pointer to a cdsExList
@@ -34,19 +34,38 @@ void cds_exlist_init(cdsExList* list, size_t dataSize, int(*cmp)(void*, void*));
  * Insert an item to the back of the list.
  *
  * list: pointer to a cdsExList
+ * data: pointer to data to add, casted as a void pointer
  */
 void cds_exlist_push(cdsExList* list, void* data);
 
+/* cds_exlist_pop
+ * --------------
+ * Remove and return the last element from the list
+ *
+ * list: pointer to a cdsExList
+ *
+ * return: data removed casted as a void pointer, NULL if the list was empty
+ */
+void* cds_exlist_pop(cdsExList* list);
+
 /* cds_exlist_get
  * --------------
- * Return the element at index idx in list
+ * Return an element at index idx in a list
+ *
+ * list: pointer to a cdsExList
+ * idx: index of element in the list
+ *
+ * return: the element at index idx in the list, NULL if out of bounds
  */
 void* cds_exlist_get(cdsExList* list, size_t idx);
 
 /* cds_exlist_destroy
  * ------------------
  * Free underlying array used by list. This will not free dynamically allocated
- * member variables of custom datatypes
+ * member variables of custom datatypes, a custom destructor will need to be
+ * implemented in that case.
+ *
+ * list: pointer to a cdsExList
  */
 void cds_exlist_destroy(cdsExList* list);
 

@@ -20,35 +20,40 @@ int main(int argc, char* argv[]) {
     cds_llist_init(&ints, sizeof(int), cds_cmpi);
 
     // lets add some integers to our list
-    for (int i = 0; i < 100; i++) {
+    printf("adding 20 elements...\n");
+    for (int i = 0; i < 20; i++) {
         cds_llist_push(&ints, &i);
     }
-
-    // now lets remove some
-    int toRemove1 = 10;
-    int toRemove2 = 45;
-    int toRemove3 = -10;
-    // the first two are in the list, so we need to free the data returned
-    free(cds_llist_remove(&ints, &toRemove1));
-    free(cds_llist_remove(&ints, &toRemove2)); 
-    // this returns NULL
-    cds_llist_remove(&ints, &toRemove3); 
 
     // print out all the elements
     cdsLNode* curr = ints.head;
     while (curr) {
-        // using void to value function (vtvi) from cds_utils to cast and 
-        // dereference the void pointer curr->data to an int
-        printf("element: %d\n", cds_vtvi(curr->data));
+        printf("%d ", cds_vtvi(curr->data));
         curr = curr->next;
     }
 
-    // lets print the length of the list now
-    printf("list size after adding 100 then removing 2 elements: %zu\n", 
-            cds_llist_len(&ints));
+    // lets remove 10 elements
+    printf("\n\nremoving 10 elements...\n");
+    for (int i = 0; i < 10; i++) {
+        void* dataRemoved = cds_llist_remove(&ints, &i);
+        // using void to value function (vtvi) from cds_utils to cast and 
+        // dereference the void pointer curr->data to an int
+        int removed = cds_vtvi(dataRemoved);
+        free(dataRemoved);
+        printf("%d ", removed);
+    }
 
-    // if ints was a dynamically allocated pointer, we would also need to free
-    // it, otherwise the rest is taken care of below
+    // print out all the elements
+    printf("\n\nelements after adding 20 and removing 10...\n");
+    curr = ints.head;
+    while (curr) {
+        printf("%d ", cds_vtvi(curr->data));
+        curr = curr->next;
+    }
+
+    // lets see the len
+    printf("\n\nlen: %zu\n", ints.len);
+
     cds_llist_destroy(&ints);
 
     return 0;

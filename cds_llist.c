@@ -41,16 +41,22 @@ void cds_llist_push(cdsLList* list, void* data) {
 void* cds_llist_remove(cdsLList* list, void* data) {
     cdsLNode* curr = list->head;
     cdsLNode* prev = curr;
+    size_t count = 0;
     while (curr) {
         if (!list->cmp(data, curr->data)) {
-            prev->next = curr->next;
+            if (count) {
+                prev->next = curr->next;
+            } else {
+                list->head = curr->next;
+            }
             void* removed = curr->data;
-            free(curr);
             list->len--;
+            free(curr);
             return removed;
         }
         prev = curr;
         curr = curr->next;
+        count++;
     }
     return NULL;
 }

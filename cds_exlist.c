@@ -3,12 +3,8 @@
  * Written by Jesse Fryer
  */
 
+#include <string.h>
 #include "cds_exlist.h"
-
-void _cds_exlist_resize(cdsExList* list) {
-    list->capacity *= 2;
-    list->data = realloc(list->data, list->capacity * list->dataSize);
-}
 
 void cds_exlist_init(
         cdsExList* list, 
@@ -22,14 +18,24 @@ void cds_exlist_init(
 }
 
 void cds_exlist_push(cdsExList* list, void* data) {
+    // resize if necessary
     if (list->len == list->capacity) {
-        _cds_exlist_resize(list);
+        list->capacity *= 2;
+        list->data = realloc(list->data, list->capacity * list->dataSize);
     }
-    char* startPtr = ((char*) list->data) + (list->len * list->dataSize);
-    for (int offset = 0; offset < list->dataSize; offset++) { 
-        *(startPtr + offset) = *(((char*) data) + offset);
-    }
+    // copy bytes from data to next position in the list
+    void* dest = ((char*) list->data) + (list->len * list->dataSize);
+    memcpy(dest, data, list->dataSize);
     list->len++;
+}
+
+void* cds_exlist_pop(cdsExList* list) {
+    if (!list->len) {
+        return NULL;
+    }
+    void* removed = ((char*) list->data) + ((list->len - 1) * list->dataSize);
+    list->len--;
+    return removed;
 }
 
 void* cds_exlist_get(cdsExList* list, size_t idx) {
@@ -42,4 +48,3 @@ void* cds_exlist_get(cdsExList* list, size_t idx) {
 void cds_exlist_destroy(cdsExList* list) {
     free(list->data);
 }
-
