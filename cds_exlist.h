@@ -1,3 +1,6 @@
+#ifndef CDS_EXLIST_H
+#define CDS_EXLIST_H
+
 /* cds_exlist.h
  *
  * A generic extensible list
@@ -69,3 +72,4 @@ void* cds_exlist_get(cdsExList* list, size_t idx);
  */
 void cds_exlist_destroy(cdsExList* list);
 
+#endif

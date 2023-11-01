@@ -1,12 +1,12 @@
+#ifndef CDS_LLIST_H
+#define CDS_LLIST_H
+
 /* cds_llist.h
  *
  * A generic linked list 
  *
  * written by Jesse Fryer
  */
-
-#ifndef CDS_LLIST_H
-#define CDS_LLIST_H
 
 #include <stdlib.h>
 
