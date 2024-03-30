@@ -1,11 +1,15 @@
 #include "cds_llist.h"
 
-void cds_llist_init(cdsLList* list, size_t dataSize, int(*cmp)(void*, void*)) {
+#include <string.h>
+
+cdsLList* cds_llist_create(size_t dataSize, cdsCmp cmp) {
+    cdsLList* list = (cdsLList*) malloc(sizeof(cdsLList));
     list->head = NULL;
     list->tail = NULL;
     list->len = 0;
     list->dataSize = dataSize;
     list->cmp = cmp;
+    return list;
 }
 
 void cds_llist_destroy(cdsLList* list) {
@@ -16,18 +20,19 @@ void cds_llist_destroy(cdsLList* list) {
         free(tmp->data);
         free(tmp);
     }
+    free(list);
 }
 
 void cds_llist_push(cdsLList* list, void* data) {
     cdsLNode* newNode = (cdsLNode*) malloc(sizeof(cdsLNode));
     newNode->next = NULL;
+    newNode->prev = NULL;
     newNode->data = malloc(list->dataSize);
-    // copy bytes into newNode->data
-    for (int offset = 0; offset < list->dataSize; offset++) { 
-        *(((char*) newNode->data) + offset) = *(((char*) data) + offset);
-    }
+
+    memcpy(newNode->data, data, list->dataSize);
 
     if (list->len) {
+        newNode->prev = list->tail;
         list->tail->next = newNode;
         list->tail = newNode;
     } else {
@@ -36,6 +41,28 @@ void cds_llist_push(cdsLList* list, void* data) {
     }
 
     list->len++;
+}
+
+void* cds_llist_pop_front(cdsLList* list) {
+    if (!list->len) {
+        return NULL;
+    }
+    void* removed = list->head;
+    list->head = list->head->next;
+    list->head->prev = NULL;
+    list->len--;
+    return removed;
+}
+
+void* cds_llist_pop_back(cdsLList* list) {
+    if (!list->len) {
+        return NULL;
+    }
+    void* removed = list->tail;
+    list->tail = list->tail->prev;
+    list->tail->next = NULL;
+    list->len--;
+    return removed;
 }
 
 void* cds_llist_remove(cdsLList* list, void* data) {
@@ -62,6 +89,5 @@ void* cds_llist_remove(cdsLList* list, void* data) {
 }
 
 size_t cds_llist_len(cdsLList* list) {
-    size_t len = list->len; // so we can't accidently overwrite
-    return len;
+    return list->len; 
 }
